@@ -1,35 +1,134 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Web Insight Scraper</title>
+<meta charset="UTF-8">
+<title>Web Insight Pro</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #1e1e2f, #3a0ca3);
+    color: white;
+    text-align: center;
+}
+
+.container {
+    margin-top: 80px;
+}
+
+h1 {
+    font-size: 45px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    opacity: 0.7;
+    margin-bottom: 30px;
+}
+
+/* Input */
+form {
+    margin-bottom: 30px;
+}
+
+input {
+    padding: 14px;
+    width: 300px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+/* Button */
+button {
+    padding: 14px 25px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(45deg, #ff4d6d, #ff9e00);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+/* Results */
+.results {
+    width: 90%;
+    max-width: 800px;
+    margin: auto;
+}
+
+.count {
+    margin-bottom: 15px;
+    font-size: 18px;
+    opacity: 0.8;
+}
+
+/* Card */
+.card {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 15px;
+    margin: 10px 0;
+    text-align: left;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.type {
+    font-weight: bold;
+    color: #ffd60a;
+}
+
+/* Animation */
+.fade {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(10px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+</style>
+
 </head>
-<body style="text-align:center; font-family:Arial">
 
-<h1>🚀 Web Insight Scraper</h1>
+<body>
 
-<form method="POST">
-    <input type="text" name="url" placeholder="Enter website URL" required>
-    <button type="submit">Analyze</button>
-</form>
+<div class="container">
+    <h1>🚀 Web Insight Pro</h1>
+    <div class="subtitle">Analyze any website headings instantly</div>
 
-{% if data %}
-    <h2>Results:</h2>
-    <table border="1" style="margin:auto">
-        <tr>
-            <th>Type</th>
-            <th>Content</th>
-            <th>Time</th>
-        </tr>
+    <form method="POST">
+        <input type="text" name="url" placeholder="https://example.com" required>
+        <button type="submit">Analyze</button>
+    </form>
 
-        {% for item in data %}
-        <tr>
-            <td>{{ item["Type"] }}</td>
-            <td>{{ item["Content"] }}</td>
-            <td>{{ item["Scraped At"] }}</td>
-        </tr>
+    {% if results %}
+    <div class="results fade">
+        <div class="count">🔍 Found {{ results|length }} headings</div>
+
+        {% for item in results %}
+        <div class="card">
+            <div class="type">{{ item.type }}</div>
+            <div>{{ item.text }}</div>
+        </div>
         {% endfor %}
-    </table>
-{% endif %}
+
+    </div>
+    {% endif %}
+</div>
 
 </body>
 </html>
