@@ -2,19 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Web Insight Pro</title>
+    <title>Headly</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}">
 
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Segoe UI", sans-serif;
+            font-family: 'Segoe UI', sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #1e1e2f, #3a0ca3);
+            background: linear-gradient(135deg, #0f172a, #3b0764);
             color: white;
             min-height: 100vh;
             display: flex;
@@ -29,17 +32,18 @@
         }
 
         .logo {
-            font-size: 22px;
-            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .lang-btn {
-            background: rgba(255,255,255,0.1);
-            border: none;
-            padding: 10px 15px;
-            border-radius: 10px;
-            color: white;
-            cursor: pointer;
+        .logo img {
+            height: 40px;
+        }
+
+        .logo span {
+            font-size: 20px;
+            font-weight: bold;
         }
 
         .container {
@@ -53,7 +57,7 @@
             margin-bottom: 10px;
         }
 
-        p.subtitle {
+        .subtitle {
             color: #ccc;
             margin-bottom: 30px;
         }
@@ -108,6 +112,11 @@
         .tag {
             font-weight: bold;
             color: #ffbe0b;
+            margin-bottom: 5px;
+        }
+
+        .copy-btn {
+            margin-top: 20px;
         }
 
         .footer {
@@ -117,22 +126,20 @@
             color: #aaa;
             font-size: 14px;
         }
-
-        .copy-btn {
-            margin-top: 20px;
-        }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">🚀 Web Insight Pro</div>
-    <button class="lang-btn">🌐 عربي</button>
+    <div class="logo">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Headly Logo">
+        <span>Headly</span>
+    </div>
 </header>
 
 <div class="container">
-    <h1>Analyze Websites Easily</h1>
-    <p class="subtitle">Extract headings instantly from any website</p>
+    <h1>Analyze Website Structure</h1>
+    <p class="subtitle">Extract headings (H1, H2, H3) instantly</p>
 
     <form method="POST">
         <input type="text" name="url" placeholder="Enter website URL..." required>
@@ -156,21 +163,21 @@
 </div>
 
 <div class="footer">
-    © 2026 Web Insight Pro | All Rights Reserved
+    © 2026 Headly | All Rights Reserved
 </div>
 
 <script>
-    function copyResults() {
-        let text = "";
-        const items = document.querySelectorAll(".card");
+function copyResults() {
+    let text = "";
+    const items = document.querySelectorAll(".card");
 
-        items.forEach(item => {
-            text += item.innerText + "\\n";
-        });
+    items.forEach(item => {
+        text += item.innerText + "\\n";
+    });
 
-        navigator.clipboard.writeText(text);
-        alert("Copied!");
-    }
+    navigator.clipboard.writeText(text);
+    alert("Copied!");
+}
 </script>
 
 </body>
