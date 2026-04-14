@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Web Insight Scraper</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #0f172a;
+            color: white;
+            text-align: center;
+        }
+        input {
+            padding: 10px;
+            width: 300px;
+        }
+        button {
+            padding: 10px;
+            background: #22c55e;
+            border: none;
+            cursor: pointer;
+        }
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 80%;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🚀 Web Insight Scraper</h1>
+
+    <form method="POST">
+        <input type="text" name="url" placeholder="Enter website URL" required>
+        <button type="submit">Analyze</button>
+    </form>
+
+    {% if data %}
+    <table>
+        <tr>
+            <th>Type</th>
+            <th>Content</th>
+            <th>Time</th>
+        </tr>
+
+        {% for item in data %}
+        <tr>
+            <td>{{ item['Type'] }}</td>
+            <td>{{ item['Content'] }}</td>
+            <td>{{ item['Scraped At'] }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+    {% endif %}
+
+</body>
+</html>
