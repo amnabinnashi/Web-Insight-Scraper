@@ -2,26 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Headly</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Favicon -->
-    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}">
+    <title>Headly | Web Analyzer</title>
 
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #0f172a, #3b0764);
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             color: white;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
         header {
@@ -32,18 +27,14 @@
         }
 
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo img {
-            height: 40px;
-        }
-
-        .logo span {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: bold;
+            color: #fff;
+        }
+
+        .nav {
+            font-size: 14px;
+            opacity: 0.8;
         }
 
         .container {
@@ -57,32 +48,34 @@
             margin-bottom: 10px;
         }
 
-        .subtitle {
-            color: #ccc;
+        p {
+            opacity: 0.7;
             margin-bottom: 30px;
         }
 
-        form {
+        .input-box {
             display: flex;
             justify-content: center;
             gap: 10px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
 
         input {
+            width: 60%;
+            max-width: 400px;
             padding: 15px;
-            width: 300px;
-            border-radius: 12px;
+            border-radius: 50px;
             border: none;
             outline: none;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         button {
             padding: 15px 25px;
+            border-radius: 50px;
             border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #ff7b00, #ff006e);
+            background: linear-gradient(135deg, #ff7a18, #ffb347);
             color: white;
             font-weight: bold;
             cursor: pointer;
@@ -94,91 +87,75 @@
         }
 
         .results {
-            margin-top: 40px;
-            max-width: 600px;
+            margin-top: 30px;
+            max-width: 700px;
             margin-left: auto;
             margin-right: auto;
         }
 
         .card {
-            background: rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.1);
             padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 12px;
+            margin: 10px 0;
+            border-radius: 15px;
             text-align: left;
             backdrop-filter: blur(10px);
         }
 
         .tag {
-            font-weight: bold;
-            color: #ffbe0b;
+            font-size: 12px;
+            color: #ffb347;
             margin-bottom: 5px;
         }
 
-        .copy-btn {
-            margin-top: 20px;
+        footer {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            opacity: 0.6;
         }
 
-        .footer {
-            margin-top: auto;
-            text-align: center;
-            padding: 20px;
-            color: #aaa;
-            font-size: 14px;
-        }
     </style>
 </head>
+
 <body>
 
 <header>
-    <div class="logo">
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="Headly Logo">
-        <span>Headly</span>
-    </div>
+    <div class="logo">Headly</div>
+    <div class="nav">Web Analyzer</div>
 </header>
 
 <div class="container">
-    <h1>Analyze Website Structure</h1>
-    <p class="subtitle">Extract headings (H1, H2, H3) instantly</p>
+    <h1>Analyze Websites Easily</h1>
+    <p>Extract headings (H1, H2, H3) from any website instantly</p>
 
     <form method="POST">
-        <input type="text" name="url" placeholder="Enter website URL..." required>
-        <button type="submit">Analyze</button>
+        <div class="input-box">
+            <input type="text" name="url" placeholder="Enter website URL..." required>
+            <button type="submit">Analyze</button>
+        </div>
     </form>
 
-    {% if results %}
+    {% if headings %}
     <div class="results">
-        <p>Found {{ results|length }} headings</p>
+        <p>Found {{ headings|length }} headings</p>
 
-        {% for item in results %}
+        {% for tag, text in headings %}
         <div class="card">
-            <div class="tag">{{ item.tag }}</div>
-            <div>{{ item.text }}</div>
+            <div class="tag">{{ tag }}</div>
+            <div>{{ text }}</div>
         </div>
         {% endfor %}
-
-        <button class="copy-btn" onclick="copyResults()">Copy Results</button>
     </div>
     {% endif %}
+
 </div>
 
-<div class="footer">
-    © 2026 Headly | All Rights Reserved
-</div>
-
-<script>
-function copyResults() {
-    let text = "";
-    const items = document.querySelectorAll(".card");
-
-    items.forEach(item => {
-        text += item.innerText + "\\n";
-    });
-
-    navigator.clipboard.writeText(text);
-    alert("Copied!");
-}
-</script>
+<footer>
+    © 2026 Headly. All rights reserved.
+</footer>
 
 </body>
 </html>
