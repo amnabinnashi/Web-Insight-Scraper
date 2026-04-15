@@ -1,99 +1,123 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Headly Pro</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-
 <body>
 
 <div class="container">
 
     <h1>Headly</h1>
-    <p class="subtitle">Advanced Website Analyzer</p>
+    <p>Advanced Website Analyzer</p>
 
+    <!-- Search -->
     <div class="search-box">
-        <input id="url" placeholder="https://example.com">
+        <input type="text" id="url" placeholder="https://example.com">
         <button onclick="analyze()">Analyze</button>
     </div>
 
-    <div id="results" class="hidden">
+    <!-- Results -->
+    <div class="results">
 
-        <div class="grid">
-
-            <div class="card">
-                <h3>SEO Score</h3>
-                <h1 id="score">0</h1>
-            </div>
-
-            <div class="card">
-                <h3>Meta Title</h3>
-                <p id="title"></p>
-            </div>
-
-            <div class="card">
-                <h3>Meta Description</h3>
-                <p id="desc"></p>
-            </div>
-
-            <div class="card">
-                <h3>Headings</h3>
-                <p id="headings"></p>
-            </div>
-
-            <div class="card">
-                <h3>Links</h3>
-                <p id="links"></p>
-            </div>
-
-            <div class="card">
-                <h3>SEO Suggestions</h3>
-                <ul id="suggestions"></ul>
-            </div>
-
+        <div class="card">
+            <h3>SEO Score</h3>
+            <p id="seo">-</p>
         </div>
 
+        <div class="card">
+            <h3>Meta Title</h3>
+            <p id="title">-</p>
+        </div>
+
+        <div class="card">
+            <h3>Meta Description</h3>
+            <p id="desc">-</p>
+        </div>
+
+        <div class="card">
+            <h3>Headings</h3>
+            <p id="headings">-</p>
+        </div>
+
+        <div class="card">
+            <h3>Links</h3>
+            <p id="links">-</p>
+        </div>
+
+        <div class="card">
+            <h3>SEO Suggestions</h3>
+            <p id="suggestions">-</p>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        © 2026 Headly Pro — Built by Amna 🚀
     </div>
 
 </div>
 
 <script>
-function analyze() {
-    let url = document.getElementById("url").value;
+async function analyze() {
+    const url = document.getElementById("url").value;
 
-    fetch("/analyze", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({url: url})
-    })
-    .then(res => res.json())
-    .then(data => {
+    if (!url) {
+        alert("Enter a URL first");
+        return;
+    }
 
-        document.getElementById("results").classList.remove("hidden");
+    // loading
+    document.getElementById("seo").innerText = "Loading...";
+    document.getElementById("title").innerText = "Loading...";
+    document.getElementById("desc").innerText = "Loading...";
+    document.getElementById("headings").innerText = "Loading...";
+    document.getElementById("links").innerText = "Loading...";
+    document.getElementById("suggestions").innerText = "Loading...";
 
-        document.getElementById("score").innerText = data.score;
-        document.getElementById("title").innerText = data.title;
-        document.getElementById("desc").innerText = data.description;
-        document.getElementById("headings").innerText =
-            `H1: ${data.h1} | H2: ${data.h2} | H3: ${data.h3}`;
-        document.getElementById("links").innerText =
-            `Internal: ${data.internal} | External: ${data.external}`;
-
-        let list = document.getElementById("suggestions");
-        list.innerHTML = "";
-
-        data.suggestions.forEach(s => {
-            let li = document.createElement("li");
-            li.innerText = s;
-            list.appendChild(li);
+    try {
+        const res = await fetch("/analyze", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ url: url })
         });
 
-    });
+        const data = await res.json();
+
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+
+        const report = data.report;
+
+        document.getElementById("seo").innerText = report.seo_score;
+        document.getElementById("title").innerText = report.meta.title || "N/A";
+        document.getElementById("desc").innerText = report.meta.description || "N/A";
+
+        document.getElementById("headings").innerText =
+            "H1: " + report.headings.h1 +
+            " | H2: " + report.headings.h2 +
+            " | H3: " + report.headings.h3;
+
+        document.getElementById("links").innerText =
+            "Internal: " + report.links.internal +
+            " | External: " + report.links.external;
+
+        document.getElementById("suggestions").innerText =
+            report.suggestions.join(", ") || "No suggestions";
+
+    } catch (err) {
+        alert("Error analyzing site");
+        console.error(err);
+    }
 }
 </script>
 
-    <footer>
-    © 2026 Headly Pro — Built by Amna 🚀
-</footer>
 </body>
 </html>
