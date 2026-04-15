@@ -19,15 +19,19 @@ body {
 .container {
     flex: 1;
     width: 100%;
-    max-width: 1100px;
+    max-width: 1200px;
     margin: auto;
-    padding: 40px 20px;
+    padding: 60px 20px;
     text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* 🔥 يخلي كل شي بالنص */
 }
 
 /* Title */
 h1 {
-    font-size: 36px;
+    font-size: 42px;
     margin-bottom: 10px;
 }
 
@@ -36,13 +40,13 @@ h1 {
     margin-bottom: 30px;
 }
 
-/* Search Box */
+/* Search */
 .search-box {
     display: flex;
     justify-content: center;
     gap: 10px;
     width: 100%;
-    max-width: 600px;
+    max-width: 650px;
     margin: auto;
 }
 
@@ -57,7 +61,7 @@ input {
 
 /* Button */
 button {
-    padding: 14px 22px;
+    padding: 14px 24px;
     border-radius: 30px;
     border: none;
     background: linear-gradient(45deg, #00c853, #64dd17);
@@ -69,39 +73,41 @@ button {
 
 button:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 15px #00e676;
+    box-shadow: 0 0 20px #00e676;
 }
 
 /* Grid */
 .grid {
-    margin-top: 40px;
+    margin-top: 50px;
+    width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
 }
 
 /* Cards */
 .card {
     background: rgba(255, 255, 255, 0.08);
-    padding: 20px;
-    border-radius: 16px;
+    padding: 25px;
+    border-radius: 18px;
     backdrop-filter: blur(12px);
     transition: 0.3s;
+    min-height: 120px;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-/* Text inside cards */
+/* Card text */
 .card h3 {
     color: #aaa;
     margin-bottom: 10px;
 }
 
 .card h1 {
-    font-size: 28px;
+    font-size: 30px;
 }
 
 .card p {
@@ -123,7 +129,7 @@ li {
     font-size: 13px;
 }
 
-/* Progress Bar */
+/* Progress bar */
 .bar {
     width: 100%;
     height: 8px;
