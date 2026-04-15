@@ -1,1 +1,81 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #2b2d42, #3a0ca3);
+    color: white;
+    text-align: center;
+    margin: 0;
+}
 
+/* Container */
+.container {
+    margin-top: 60px;
+}
+
+/* Input + Button */
+.search-box {
+    margin: 20px;
+}
+
+input {
+    padding: 12px;
+    width: 250px;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+/* Button */
+button {
+    padding: 12px 25px;
+    background: linear-gradient(135deg, orange, #ff7b00);
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+/* Cards */
+.card {
+    background: rgba(255,255,255,0.08);
+    margin: 20px auto;
+    padding: 20px;
+    width: 85%;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    text-align: left;
+}
+
+/* Titles */
+h1 {
+    font-size: 40px;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    color: white;
+}
+
+td {
+    padding: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Hidden */
+.hidden {
+    display: none;
+}
