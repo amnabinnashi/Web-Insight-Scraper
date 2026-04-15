@@ -2,119 +2,185 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Headly - Website Analyzer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Headly Pro</title>
-    <link rel="stylesheet" href="/static/style.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3c2f, #2c5364);
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-size: 40px;
+            margin-bottom: 5px;
+        }
+
+        p {
+            opacity: 0.7;
+        }
+
+        .search-box {
+            margin: 30px auto;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            max-width: 500px;
+        }
+
+        input {
+            flex: 1;
+            padding: 15px;
+            border-radius: 30px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 15px 25px;
+            border-radius: 30px;
+            border: none;
+            background: #00ff88;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #00cc6a;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .value {
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
 </head>
+
 <body>
 
 <div class="container">
-
     <h1>Headly</h1>
     <p>Advanced Website Analyzer</p>
 
-    <!-- Search -->
     <div class="search-box">
-        <input type="text" id="url" placeholder="https://example.com">
+        <input id="url" type="text" placeholder="https://example.com">
         <button onclick="analyze()">Analyze</button>
     </div>
 
-    <!-- Results -->
-    <div class="results">
-
+    <div class="cards">
         <div class="card">
             <h3>SEO Score</h3>
-            <p id="seo">-</p>
+            <div id="score" class="value">-</div>
         </div>
 
         <div class="card">
             <h3>Meta Title</h3>
-            <p id="title">-</p>
+            <div id="title" class="value">-</div>
         </div>
 
         <div class="card">
             <h3>Meta Description</h3>
-            <p id="desc">-</p>
+            <div id="desc" class="value">-</div>
         </div>
 
         <div class="card">
             <h3>Headings</h3>
-            <p id="headings">-</p>
+            <div id="headings" class="value">-</div>
         </div>
 
         <div class="card">
             <h3>Links</h3>
-            <p id="links">-</p>
+            <div id="links" class="value">-</div>
         </div>
-
-        <div class="card">
-            <h3>SEO Suggestions</h3>
-            <p id="suggestions">-</p>
-        </div>
-
     </div>
-
-    <!-- Footer -->
-    <div class="footer">
-        © 2026 Headly Pro — Built by Amna 🚀
-    </div>
-
 </div>
 
+<!-- ✅ JavaScript -->
 <script>
 async function analyze() {
-    const url = document.getElementById("url").value;
+    const url = document.getElementById("url").value.trim();
 
     if (!url) {
-        alert("Enter a URL first");
+        alert("اكتب الرابط أول");
         return;
     }
 
-    // loading
-    document.getElementById("seo").innerText = "Loading...";
-    document.getElementById("title").innerText = "Loading...";
-    document.getElementById("desc").innerText = "Loading...";
-    document.getElementById("headings").innerText = "Loading...";
-    document.getElementById("links").innerText = "Loading...";
-    document.getElementById("suggestions").innerText = "Loading...";
+    // عناصر العرض
+    const score = document.getElementById("score");
+    const title = document.getElementById("title");
+    const desc = document.getElementById("desc");
+    const headings = document.getElementById("headings");
+    const links = document.getElementById("links");
+
+    // Loading
+    score.innerText = "Loading...";
+    title.innerText = "Loading...";
+    desc.innerText = "Loading...";
+    headings.innerText = "Loading...";
+    links.innerText = "Loading...";
 
     try {
-        const res = await fetch("/analyze", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ url: url })
-        });
+        const res = await fetch(`/analyze?url=${encodeURIComponent(url)}`);
+
+        if (!res.ok) {
+            throw new Error("Server error");
+        }
 
         const data = await res.json();
 
         if (data.error) {
-            alert(data.error);
-            return;
+            throw new Error(data.error);
         }
 
-        const report = data.report;
+        // عرض النتائج
+        score.innerText = data.score || 0;
+        title.innerText = data.title || "N/A";
+        desc.innerText = data.description || "N/A";
 
-        document.getElementById("seo").innerText = report.seo_score;
-        document.getElementById("title").innerText = report.meta.title || "N/A";
-        document.getElementById("desc").innerText = report.meta.description || "N/A";
+        headings.innerText =
+            `H1: ${data.h1} | H2: ${data.h2} | H3: ${data.h3}`;
 
-        document.getElementById("headings").innerText =
-            "H1: " + report.headings.h1 +
-            " | H2: " + report.headings.h2 +
-            " | H3: " + report.headings.h3;
-
-        document.getElementById("links").innerText =
-            "Internal: " + report.links.internal +
-            " | External: " + report.links.external;
-
-        document.getElementById("suggestions").innerText =
-            report.suggestions.join(", ") || "No suggestions";
+        links.innerText =
+            `Internal: ${data.internal_links} | External: ${data.external_links}`;
 
     } catch (err) {
-        alert("Error analyzing site");
         console.error(err);
+
+        score.innerText = "Error ❌";
+        title.innerText = "Error";
+        desc.innerText = "Error";
+        headings.innerText = "Error";
+        links.innerText = "Error";
+
+        alert("خطأ: " + err.message);
     }
 }
 </script>
