@@ -1,49 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Headly Pro</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
+
 <body>
 
 <div class="container">
 
-    <h1>Headly Pro</h1>
+    <h1>Headly</h1>
     <p class="subtitle">Advanced Website Analyzer</p>
 
     <div class="search-box">
-        <input type="text" id="url" placeholder="https://example.com">
+        <input id="url" placeholder="https://example.com">
         <button onclick="analyze()">Analyze</button>
     </div>
 
-    <!-- Loading -->
-    <div id="loading" class="hidden">
-        <div class="loader"></div>
-        <p>Analyzing website...</p>
-    </div>
-
-    <!-- Results -->
     <div id="results" class="hidden">
 
         <div class="grid">
 
-            <div class="card center">
+            <div class="card">
                 <h3>SEO Score</h3>
-                <p id="seoScore" class="big"></p>
-                <div class="progress">
-                    <div id="progressBar"></div>
-                </div>
+                <h1 id="score">0</h1>
             </div>
 
             <div class="card">
                 <h3>Meta Title</h3>
-                <p id="metaTitle"></p>
+                <p id="title"></p>
             </div>
 
             <div class="card">
                 <h3>Meta Description</h3>
-                <p id="metaDesc"></p>
+                <p id="desc"></p>
             </div>
 
             <div class="card">
@@ -57,22 +47,50 @@
             </div>
 
             <div class="card">
-                <h3>Data</h3>
-                <p id="data"></p>
+                <h3>SEO Suggestions</h3>
+                <ul id="suggestions"></ul>
             </div>
 
-        </div>
-
-        <!-- Suggestions -->
-        <div class="card">
-            <h3>SEO Suggestions</h3>
-            <ul id="suggestions"></ul>
         </div>
 
     </div>
 
 </div>
 
-<script src="/static/script.js"></script>
+<script>
+function analyze() {
+    let url = document.getElementById("url").value;
+
+    fetch("/analyze", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({url: url})
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        document.getElementById("results").classList.remove("hidden");
+
+        document.getElementById("score").innerText = data.score;
+        document.getElementById("title").innerText = data.title;
+        document.getElementById("desc").innerText = data.description;
+        document.getElementById("headings").innerText =
+            `H1: ${data.h1} | H2: ${data.h2} | H3: ${data.h3}`;
+        document.getElementById("links").innerText =
+            `Internal: ${data.internal} | External: ${data.external}`;
+
+        let list = document.getElementById("suggestions");
+        list.innerHTML = "";
+
+        data.suggestions.forEach(s => {
+            let li = document.createElement("li");
+            li.innerText = s;
+            list.appendChild(li);
+        });
+
+    });
+}
+</script>
+
 </body>
 </html>
