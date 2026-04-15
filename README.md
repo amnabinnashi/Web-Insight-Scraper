@@ -35,6 +35,3 @@ Headly Pro is a web-based tool built with Python and Flask that allows users to 
 - Pandas
 - HTML, CSS, JavaScript
 
----
-
-## Project Structure
