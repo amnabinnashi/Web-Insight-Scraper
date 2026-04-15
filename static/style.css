@@ -94,6 +94,12 @@ ul {
     font-size: 14px;
 }
 
+/* الخطأ */
+.error {
+    color: #ff5252;
+    margin-bottom: 20px;
+}
+
 /* Footer */
 .footer {
     margin-top: 40px;
