@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Headly</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
@@ -12,49 +12,52 @@
     <h1>Headly</h1>
     <p class="subtitle">Advanced Website Analyzer</p>
 
-    <div class="input-box">
-        <input id="url" type="text" placeholder="https://example.com">
-        <button onclick="analyze()">Analyze</button>
-    </div>
+    <form method="POST">
+        <input type="text" name="url" placeholder="https://example.com" required>
+        <button type="submit">Analyze</button>
+    </form>
 
-    <!-- RESULTS -->
-    <div id="results" class="results hidden">
+    {% if data %}
+        <div class="results">
 
-        <div class="card">
-            <h3>SEO Score</h3>
-            <div id="score" class="value">-</div>
+            <div class="card">
+                <h3>SEO Score</h3>
+                <p>{{ data.score }}</p>
+            </div>
+
+            <div class="card">
+                <h3>Meta Title</h3>
+                <p>{{ data.title }}</p>
+            </div>
+
+            <div class="card">
+                <h3>Meta Description</h3>
+                <p>{{ data.description }}</p>
+            </div>
+
+            <div class="card">
+                <h3>Headings</h3>
+                <p>H1: {{ data.h1 }} | H2: {{ data.h2 }} | H3: {{ data.h3 }}</p>
+            </div>
+
+            <div class="card">
+                <h3>Links</h3>
+                <p>Internal: {{ data.internal_links }} | External: {{ data.external_links }}</p>
+            </div>
+
+            <div class="card">
+                <h3>SEO Suggestions</h3>
+                <ul>
+                    {% for s in data.suggestions %}
+                        <li>{{ s }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
         </div>
-
-        <div class="card">
-            <h3>Meta Title</h3>
-            <div id="title" class="value">-</div>
-        </div>
-
-        <div class="card">
-            <h3>Meta Description</h3>
-            <div id="desc" class="value">-</div>
-        </div>
-
-        <div class="card">
-            <h3>Headings</h3>
-            <div id="headings" class="value">-</div>
-        </div>
-
-        <div class="card">
-            <h3>Links</h3>
-            <div id="links" class="value">-</div>
-        </div>
-
-        <div class="card">
-            <h3>SEO Suggestions</h3>
-            <div id="suggestions" class="value">-</div>
-        </div>
-
-    </div>
+    {% endif %}
 
 </div>
-
-<script src="/static/script.js"></script>
 
 </body>
 </html>
