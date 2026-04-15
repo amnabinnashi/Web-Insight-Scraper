@@ -2,188 +2,103 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Headly - Website Analyzer</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <title>Headly - SEO Analyzer</title>
     <style>
         body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #1e3c2f, #2c5364);
+            font-family: Arial;
+            background: linear-gradient(135deg, #1f4037, #99f2c8);
             color: white;
             text-align: center;
-        }
-
-        .container {
-            padding: 40px 20px;
+            padding: 30px;
         }
 
         h1 {
             font-size: 40px;
-            margin-bottom: 5px;
-        }
-
-        p {
-            opacity: 0.7;
-        }
-
-        .search-box {
-            margin: 30px auto;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            max-width: 500px;
         }
 
         input {
-            flex: 1;
             padding: 15px;
-            border-radius: 30px;
+            width: 60%;
+            border-radius: 25px;
             border: none;
             outline: none;
-            font-size: 16px;
         }
 
         button {
-            padding: 15px 25px;
-            border-radius: 30px;
+            padding: 15px 30px;
+            border-radius: 25px;
             border: none;
-            background: #00ff88;
+            background: #00ff99;
             color: black;
             font-weight: bold;
             cursor: pointer;
         }
 
-        button:hover {
-            background: #00cc6a;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 40px;
-        }
-
         .card {
             background: rgba(255,255,255,0.1);
+            margin: 20px auto;
             padding: 20px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-        }
-
-        .card h3 {
-            margin-bottom: 10px;
-            opacity: 0.8;
+            width: 80%;
+            border-radius: 20px;
         }
 
         .value {
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 20px;
+            margin-top: 10px;
         }
     </style>
 </head>
-
 <body>
 
-<div class="container">
-    <h1>Headly</h1>
-    <p>Advanced Website Analyzer</p>
+<h1>Headly</h1>
+<p>Advanced Website Analyzer</p>
 
-    <div class="search-box">
-        <input id="url" type="text" placeholder="https://example.com">
-        <button onclick="analyze()">Analyze</button>
+<form method="POST">
+    <input type="text" name="url" placeholder="Enter website URL" required>
+    <button type="submit">Analyze</button>
+</form>
+
+{% if data %}
+    <div class="card">
+        <h3>SEO Score</h3>
+        <div class="value">{{ data.score }}</div>
     </div>
 
-    <div class="cards">
-        <div class="card">
-            <h3>SEO Score</h3>
-            <div id="score" class="value">-</div>
-        </div>
+    <div class="card">
+        <h3>Meta Title</h3>
+        <div class="value">{{ data.title }}</div>
+    </div>
 
-        <div class="card">
-            <h3>Meta Title</h3>
-            <div id="title" class="value">-</div>
-        </div>
+    <div class="card">
+        <h3>Meta Description</h3>
+        <div class="value">{{ data.description }}</div>
+    </div>
 
-        <div class="card">
-            <h3>Meta Description</h3>
-            <div id="desc" class="value">-</div>
-        </div>
-
-        <div class="card">
-            <h3>Headings</h3>
-            <div id="headings" class="value">-</div>
-        </div>
-
-        <div class="card">
-            <h3>Links</h3>
-            <div id="links" class="value">-</div>
+    <div class="card">
+        <h3>Headings</h3>
+        <div class="value">
+            H1: {{ data.h1 }} | H2: {{ data.h2 }} | H3: {{ data.h3 }}
         </div>
     </div>
-</div>
 
-<!-- ✅ JavaScript -->
-<script>
-async function analyze() {
-    const url = document.getElementById("url").value.trim();
+    <div class="card">
+        <h3>Links</h3>
+        <div class="value">
+            Internal: {{ data.internal_links }} | External: {{ data.external_links }}
+        </div>
+    </div>
 
-    if (!url) {
-        alert("اكتب الرابط أول");
-        return;
-    }
+    <!-- 🔥 الجديد -->
+    <div class="card">
+        <h3>SEO Suggestions</h3>
+        <div class="value">
+            {% for tip in data.suggestions %}
+                <p>• {{ tip }}</p>
+            {% endfor %}
+        </div>
+    </div>
 
-    // عناصر العرض
-    const score = document.getElementById("score");
-    const title = document.getElementById("title");
-    const desc = document.getElementById("desc");
-    const headings = document.getElementById("headings");
-    const links = document.getElementById("links");
-
-    // Loading
-    score.innerText = "Loading...";
-    title.innerText = "Loading...";
-    desc.innerText = "Loading...";
-    headings.innerText = "Loading...";
-    links.innerText = "Loading...";
-
-    try {
-        const res = await fetch(`/analyze?url=${encodeURIComponent(url)}`);
-
-        if (!res.ok) {
-            throw new Error("Server error");
-        }
-
-        const data = await res.json();
-
-        if (data.error) {
-            throw new Error(data.error);
-        }
-
-        // عرض النتائج
-        score.innerText = data.score || 0;
-        title.innerText = data.title || "N/A";
-        desc.innerText = data.description || "N/A";
-
-        headings.innerText =
-            `H1: ${data.h1} | H2: ${data.h2} | H3: ${data.h3}`;
-
-        links.innerText =
-            `Internal: ${data.internal_links} | External: ${data.external_links}`;
-
-    } catch (err) {
-        console.error(err);
-
-        score.innerText = "Error ❌";
-        title.innerText = "Error";
-        desc.innerText = "Error";
-        headings.innerText = "Error";
-        links.innerText = "Error";
-
-        alert("خطأ: " + err.message);
-    }
-}
-</script>
+{% endif %}
 
 </body>
 </html>
