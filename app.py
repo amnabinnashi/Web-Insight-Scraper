@@ -1,39 +1,30 @@
-from flask import Flask, render_template, request
-import requests
-from bs4 import BeautifulSoup
+from flask import Flask, render_template, request, jsonify
+from scraper import WebInsightPro
 
 app = Flask(__name__)
 
-@app.route("/", methods=["GET", "POST"])
+@app.route('/')
 def home():
-    headings = []
+    return render_template('index.html')
 
-    if request.method == "POST":
-        url = request.form.get("url")
+@app.route('/analyze', methods=['POST'])
+def analyze():
+    data = request.get_json()
+    url = data.get('url')
 
-        # تأكد الرابط فيه http
-        if not url.startswith("http"):
-            url = "https://" + url
+    tool = WebInsightPro(url)
+    error = tool.fetch_data()
 
-        try:
-            response = requests.get(url, timeout=5)
-            soup = BeautifulSoup(response.text, "html.parser")
+    if error:
+        return jsonify({"error": error})
 
-            # استخراج H1, H2, H3
-            for tag in ["h1", "h2", "h3"]:
-                for h in soup.find_all(tag):
-                    text = h.get_text(strip=True)
-                    if text:
-                        headings.append((tag.upper(), text))
+    report = tool.full_report()
+    df = tool.get_dataframe()
 
-        except Exception as e:
-            headings.append(("Error", "Failed to fetch website"))
+    return jsonify({
+        "report": report,
+        "data": df.to_dict(orient='records')
+    })
 
-    return render_template("index.html", headings=headings)
-
-
-# تشغيل السيرفر (مهم لـ Render)
-if __name__ == "__main__":
-    import os
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+if __name__ == '__main__':
+    app.run(debug=True)
