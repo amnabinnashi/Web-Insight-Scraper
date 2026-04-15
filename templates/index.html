@@ -8,44 +8,69 @@
 <body>
 
 <div class="container">
-    <h1>Headly Pro 🚀</h1>
-    <p>Advanced Website Analyzer</p>
+
+    <h1>Headly Pro</h1>
+    <p class="subtitle">Advanced Website Analyzer</p>
 
     <div class="search-box">
-        <input type="text" id="url" placeholder="Enter Website URL">
+        <input type="text" id="url" placeholder="https://example.com">
         <button onclick="analyze()">Analyze</button>
     </div>
 
-    <!-- RESULTS -->
+    <!-- Loading -->
+    <div id="loading" class="hidden">
+        <div class="loader"></div>
+        <p>Analyzing website...</p>
+    </div>
+
+    <!-- Results -->
     <div id="results" class="hidden">
 
-        <div class="card">
-            <h2>SEO Score</h2>
-            <p id="seoScore"></p>
+        <div class="grid">
+
+            <div class="card center">
+                <h3>SEO Score</h3>
+                <p id="seoScore" class="big"></p>
+                <div class="progress">
+                    <div id="progressBar"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Meta Title</h3>
+                <p id="metaTitle"></p>
+            </div>
+
+            <div class="card">
+                <h3>Meta Description</h3>
+                <p id="metaDesc"></p>
+            </div>
+
+            <div class="card">
+                <h3>Headings</h3>
+                <p id="headings"></p>
+            </div>
+
+            <div class="card">
+                <h3>Links</h3>
+                <p id="links"></p>
+            </div>
+
+            <div class="card">
+                <h3>Data</h3>
+                <p id="data"></p>
+            </div>
+
         </div>
 
+        <!-- Suggestions -->
         <div class="card">
-            <h2>Meta Info</h2>
-            <p><strong>Title:</strong> <span id="metaTitle"></span></p>
-            <p><strong>Description:</strong> <span id="metaDesc"></span></p>
-        </div>
-
-        <div class="card">
-            <h2>Headings</h2>
-            <p id="headings"></p>
-        </div>
-
-        <div class="card">
-            <h2>Links</h2>
-            <p id="links"></p>
-        </div>
-
-        <div class="card">
-            <h2>Data</h2>
-            <table id="dataTable"></table>
+            <h3>SEO Suggestions</h3>
+            <ul id="suggestions"></ul>
         </div>
 
     </div>
+
 </div>
 
 <script src="/static/script.js"></script>
