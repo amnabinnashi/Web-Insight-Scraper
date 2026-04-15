@@ -1,81 +1,106 @@
 body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #2b2d42, #3a0ca3);
+    font-family: Arial;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
     color: white;
-    text-align: center;
     margin: 0;
 }
 
-/* Container */
 .container {
-    margin-top: 60px;
+    text-align: center;
+    padding: 40px 20px;
 }
 
-/* Input + Button */
+.subtitle {
+    color: #94a3b8;
+}
+
 .search-box {
-    margin: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 30px 0;
 }
 
 input {
     padding: 12px;
-    width: 250px;
+    width: 260px;
     border-radius: 25px;
     border: none;
-    outline: none;
-    font-size: 14px;
 }
 
-/* Button */
 button {
-    padding: 12px 25px;
-    background: linear-gradient(135deg, orange, #ff7b00);
+    padding: 12px 20px;
+    background: #22c55e;
     border: none;
     border-radius: 25px;
-    cursor: pointer;
     color: white;
-    font-weight: bold;
+    cursor: pointer;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    max-width: 900px;
+    margin: auto;
+}
+
+.card {
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: left;
+    backdrop-filter: blur(10px);
     transition: 0.3s;
 }
 
-button:hover {
-    transform: scale(1.05);
-    opacity: 0.9;
+.card:hover {
+    transform: translateY(-5px);
 }
 
-/* Cards */
-.card {
-    background: rgba(255,255,255,0.08);
-    margin: 20px auto;
-    padding: 20px;
-    width: 85%;
-    border-radius: 20px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-    text-align: left;
+.center {
+    text-align: center;
 }
 
-/* Titles */
-h1 {
-    font-size: 40px;
+.big {
+    font-size: 32px;
+    font-weight: bold;
 }
 
-h2 {
-    margin-bottom: 10px;
+/* Progress bar */
+.progress {
+    background: rgba(255,255,255,0.1);
+    height: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
 }
 
-/* Table */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    color: white;
+#progressBar {
+    height: 10px;
+    border-radius: 10px;
+    width: 0%;
+    background: #22c55e;
 }
 
-td {
-    padding: 8px;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
+/* Loader */
+.loader {
+    border: 4px solid #eee;
+    border-top: 4px solid #22c55e;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin: auto;
+    animation: spin 1s linear infinite;
 }
 
-/* Hidden */
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
 .hidden {
     display: none;
+}
+
+ul {
+    padding-left: 20px;
 }
