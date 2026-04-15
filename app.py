@@ -1,24 +1,17 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, render_template, request
 from scraper import analyze_site
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def home():
-    return render_template("index.html")
+    data = None
 
-@app.route("/analyze")
-def analyze():
-    url = request.args.get("url")
-
-    if not url:
-        return jsonify({"error": "No URL provided"}), 400
-
-    try:
+    if request.method == "POST":
+        url = request.form.get("url")
         data = analyze_site(url)
-        return jsonify(data)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+
+    return render_template("index.html", data=data)
 
 if __name__ == "__main__":
     app.run(debug=True)
