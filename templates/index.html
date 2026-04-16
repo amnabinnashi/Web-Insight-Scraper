@@ -7,83 +7,171 @@
 
 <style>
 body {
+    margin: 0;
     font-family: Arial;
-    background: linear-gradient(135deg, #3ca55c, #2f6b3f);
-    text-align: center;
+    background: linear-gradient(135deg, #6a5acd, #8a7cff);
     color: white;
-    padding: 20px;
+    text-align: center;
+}
+
+/* HEADER */
+.header {
+    padding: 40px 20px 20px;
+}
+
+.header h1 {
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+
+.header p {
+    opacity: 0.8;
+}
+
+/* SEARCH */
+.search-box {
+    margin-top: 20px;
 }
 
 input {
-    padding: 10px;
-    width: 60%;
-    border-radius: 20px;
+    padding: 12px;
+    width: 65%;
+    max-width: 400px;
+    border-radius: 25px;
     border: none;
+    outline: none;
 }
 
 button {
-    padding: 10px 20px;
-    border-radius: 20px;
+    padding: 12px 20px;
+    border-radius: 25px;
     border: none;
-    background: #00ff88;
+    background: #00ffb3;
+    color: black;
+    font-weight: bold;
     cursor: pointer;
+    margin-left: 5px;
+}
+
+/* CARDS */
+.container {
+    margin-top: 30px;
+    padding-bottom: 40px;
 }
 
 .card {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 20px;
     margin: 15px auto;
-    padding: 15px;
     width: 90%;
     max-width: 400px;
-    border-radius: 15px;
-    background: rgba(255,255,255,0.1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
 
+.card h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    opacity: 0.9;
+}
+
+.value {
+    font-size: 16px;
+}
+
+/* FOOTER */
 .footer {
-    margin-top: 20px;
-    color: #ddd;
+    margin: 20px;
+    opacity: 0.7;
 }
 </style>
 
 </head>
 <body>
 
-<h1>Headly</h1>
-<p>Advanced Website Analyzer</p>
+<div class="header">
+    <h1>Headly</h1>
+    <p>Advanced Website Analyzer</p>
 
-<input type="text" id="url" placeholder="https://example.com">
-<button onclick="analyze()">Analyze</button>
+    <div class="search-box">
+        <input type="text" id="url" placeholder="https://example.com">
+        <button onclick="analyze()">Analyze</button>
+    </div>
+</div>
 
-<div class="card"><h3>SEO Score</h3><div id="score">-</div></div>
-<div class="card"><h3>Meta Title</h3><div id="title">-</div></div>
-<div class="card"><h3>Meta Description</h3><div id="desc">-</div></div>
-<div class="card"><h3>Headings</h3><div id="headings">-</div></div>
-<div class="card"><h3>Links</h3><div id="links">-</div></div>
-<div class="card"><h3>SEO Suggestions</h3><div id="suggestions">-</div></div>
+<div class="container">
 
-<div class="footer">© 2026 Headly by Amna</div>
+    <div class="card">
+        <h3>SEO Score</h3>
+        <div id="score" class="value">-</div>
+    </div>
+
+    <div class="card">
+        <h3>Meta Title</h3>
+        <div id="title" class="value">-</div>
+    </div>
+
+    <div class="card">
+        <h3>Meta Description</h3>
+        <div id="desc" class="value">-</div>
+    </div>
+
+    <div class="card">
+        <h3>Headings</h3>
+        <div id="headings" class="value">-</div>
+    </div>
+
+    <div class="card">
+        <h3>Links</h3>
+        <div id="links" class="value">-</div>
+    </div>
+
+    <div class="card">
+        <h3>SEO Suggestions</h3>
+        <div id="suggestions" class="value">-</div>
+    </div>
+
+</div>
+
+<div class="footer">
+    © 2026 Headly by Amna
+</div>
 
 <script>
 async function analyze() {
     const url = document.getElementById("url").value;
 
-    const res = await fetch("/analyze", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({url})
-    });
+    if (!url) {
+        alert("Enter a URL first");
+        return;
+    }
 
-    const data = await res.json();
+    try {
+        const res = await fetch("/analyze", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({url})
+        });
 
-    document.getElementById("score").innerText = data.score || "-";
-    document.getElementById("title").innerText = data.title || "-";
-    document.getElementById("desc").innerText = data.description || "-";
-    document.getElementById("headings").innerText =
-        `H1: ${data.h1} | H2: ${data.h2} | H3: ${data.h3}`;
-    document.getElementById("links").innerText =
-        `Internal: ${data.internal_links} | External: ${data.external_links}`;
+        const data = await res.json();
 
-    document.getElementById("suggestions").innerHTML =
-        data.suggestions.map(s => "• " + s).join("<br>");
+        document.getElementById("score").innerText = data.score || "-";
+        document.getElementById("title").innerText = data.title || "-";
+        document.getElementById("desc").innerText = data.description || "-";
+
+        document.getElementById("headings").innerText =
+            `H1: ${data.h1} | H2: ${data.h2} | H3: ${data.h3}`;
+
+        document.getElementById("links").innerText =
+            `Internal: ${data.internal_links} | External: ${data.external_links}`;
+
+        document.getElementById("suggestions").innerHTML =
+            data.suggestions.map(s => "• " + s).join("<br>");
+
+    } catch (error) {
+        alert("Error connecting to server");
+    }
 }
 </script>
 
